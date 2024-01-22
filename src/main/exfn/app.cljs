@@ -33,11 +33,16 @@
             (if (= cell -1)
               [:div.inactive]
               [:div
-               {:on-click #(rf/dispatch-sync [:select-cell cell])
+               {:on-click
+                (if (lgc/target-cell? targets cell)
+                  (do
+                    (prn "jumping!")
+                    #(rf/dispatch-sync [:jump cell]))
+                  #(rf/dispatch-sync [:select-cell cell]))
                 :class (cond
-                         (= cell selected-cell) "selected"
+                         (= cell selected-cell)          "selected"
                          (lgc/target-cell? targets cell) "target"
-                         :else "board-cell")}
+                         :else                           "board-cell")}
                [:div.concave
                 (when (lgc/has-marble? board cell)
                   [:div.marble])]])))]]]]))
@@ -62,6 +67,6 @@
   (rf/dispatch-sync [:set-game-over])
 
   
- 
+  (second {:north nil} )
 
   )

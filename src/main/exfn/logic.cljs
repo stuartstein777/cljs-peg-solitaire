@@ -127,10 +127,14 @@
         can-jump-west (can-jump board from 2)
         can-jump-south (can-jump board from 3)]
     
-    [{:north (when can-jump-north (get-in board [(neighbors 0) :neighbors 0]))} 
-     {:east (when can-jump-east (get-in board [(neighbors 1) :neighbors 1]))}
-     {:west (when can-jump-west (get-in board [(neighbors 2) :neighbors 2]))}
-     {:south (when can-jump-south (get-in board [(neighbors 3) :neighbors 3]))}]))
+    [{:direction :north
+      :cell (when can-jump-north (get-in board [(neighbors 0) :neighbors 0]))} 
+     {:direction :east
+      :cell (when can-jump-east (get-in board [(neighbors 1) :neighbors 1]))}
+     {:direction :west 
+      :cell (when can-jump-west (get-in board [(neighbors 2) :neighbors 2]))}
+     {:direction :south
+      :cell (when can-jump-south (get-in board [(neighbors 3) :neighbors 3]))}]))
 
 (defn pegs-remaining [board]
   (count (filter true? (map :has-marble (vals board)))))
@@ -140,6 +144,9 @@
 ;; the cell in between needs to set has-marble: false.
 ;; cell in between is board->from->neighbors->direction
 (defn jump [board from target direction]
+  (prn "from: " from)
+  (prn "target: " target)
+  (prn "direction: " direction)
   (-> board
       (update-in [from] assoc :has-marble false)
       (update-in [target] assoc :has-marble true)
@@ -193,15 +200,19 @@
         47 33} cell) -1))
 
 (defn target-cell? [targets cell-id]
-  ((->> (mapcat vals targets)
+  (prn "targets" targets)
+  (prn "cell id" cell-id)
+  ((->> (map :cell targets)
         (remove nil?)
         (set))
    cell-id))
 
 (comment
-  (let [targets [{:north 17} {:east nil} {:west nil} {:south nil}]
-        cell-id 18]
-    (target-cell? targets cell-id))
+  (let [targets #{{:direction :north, :cell 17} {:direction :east, :cell nil} {:direction :west, :cell nil} {:direction :south, :cell nil}}
+        cell-id 17]
+    (target-cell? targets cell-id)
+    )
+  
   )
 (comment
   
@@ -211,7 +222,7 @@
   (jump (generate-board) 29 17 0)
   
   
-  
+  (target-cell? #{{:north nil} {:east nil} {:west nil} {:south 17}} 17)
   )
 
 
