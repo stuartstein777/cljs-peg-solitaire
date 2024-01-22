@@ -100,7 +100,7 @@ body{
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-190%, -122%);
+    transform: translate(-154%, -122%);
     z-index: 10;
     font-size: 3em;
     color: red;
