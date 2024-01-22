@@ -25,3 +25,8 @@
  :game-over?
  (fn [db _]
    (:game-over? db)))
+
+(rf/reg-sub
+ :game-win?
+ (fn [db _]
+   (:game-win? db)))

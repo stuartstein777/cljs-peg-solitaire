@@ -7,13 +7,19 @@
             [goog.string.format]))
 
 ;; -- App -------------------------------------------------------------------------
+
 (defn app []
   (let [board          @(rf/subscribe [:board])
         selected-cell  @(rf/subscribe [:selected-cell])
         targets        @(rf/subscribe [:targets])
         remaining-pegs @(rf/subscribe [:remaining-pegs])
-        game-over?     @(rf/subscribe [:game-over?])]
+        game-over?     @(rf/subscribe [:game-over?])
+        game-win?      @(rf/subscribe [:game-win?])]
     [:div.container
+     (when game-over?
+         [:div.game-over "Game Over"])
+     (when game-win?
+       [:div.winner "Winner!"])
      [:div.row
       [:div.col.col-lg-8
        [:h1 "Peg Solitaire"]]
@@ -44,9 +50,7 @@
                             :else                           "board-cell")}
                [:div.concave
                 (when (lgc/has-marble? board cell)
-                  [:div.marble])]])))]
-       #_(when game-over?
-         [:div.game-over "Game Over"])]]
+                  [:div.marble])]])))]]]
      [:div.row
       {:style {:padding-top 20}}
       [:div.col.col-lg-4
@@ -72,10 +76,27 @@
 
 (comment
 
-  "Some dev-test events for reseting board."
-  (rf/dispatch-sync [:set-game-over])
+
+  (rf/dispatch-sync [:set-board-near-win])
 
   
-  (second {:north nil} )
+
+'({:cell 4, :direction 3, :has-jump true}
+  {:cell 6, :direction 3, :has-jump true}
+  {:cell 8, :direction 1, :has-jump true}
+  {:cell 10, :direction 1, :has-jump true}
+  {:cell 10, :direction 2, :has-jump true}
+  {:cell 12, :direction 2, :has-jump true}
+  {:cell 16, :direction 0, :has-jump true}
+  {:cell 16, :direction 3, :has-jump true}
+  {:cell 18, :direction 0, :has-jump true}
+  {:cell 18, :direction 3, :has-jump true}
+  {:cell 22, :direction 1, :has-jump true}
+  {:cell 24, :direction 1, :has-jump true}
+  {:cell 24, :direction 2, :has-jump true}
+  {:cell 26, :direction 2, :has-jump true}
+  {:cell 28, :direction 0, :has-jump true}
+  {:cell 30, :direction 0, :has-jump true}
+  )
 
   )

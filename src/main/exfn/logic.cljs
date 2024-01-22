@@ -149,14 +149,19 @@
       (update-in [target] assoc :has-marble true)
       (update-in [(get-in board [from :neighbors direction])] assoc :has-marble false)))
 
-(defn any-jumps-remaining [board]
-  (let [cells (range 1 34)]
-    (->>
-     (for [cell cells
-           direction (range 0 4)
-           :when (can-jump board cell direction)]
-       true)
-     (some true?))))
+(defn remaining-jumps [board]
+  (let [cells (range 1 34)
+        jumps (->>
+               (for [cell      cells
+                     direction (range 0 4)
+                     :when     (and
+                                (has-marble? board cell)
+                                (can-jump board cell direction))]
+                 {:cell      cell
+                  :direction direction
+                  :has-jump  true})
+               )]
+    jumps))
 
 (defn game-won? [board]
   (= 1 (pegs-remaining board)))
@@ -211,13 +216,124 @@
   )
 (comment
   
-  (any-jumps-remaining (generate-board))
+  (remaining-jumps (generate-board))
   (pegs-remaining (generate-board))
   (get-potential-jumps (generate-board) 29)
   (jump (generate-board) 29 17 0)
   
   
   (target-cell? #{{:north nil} {:east nil} {:west nil} {:south 17}} 17)
+
+
+
+  (let [board {:board {1  {:id         1
+                           :has-marble false
+                           :neighbors  [nil 2 nil 4]}
+                       2  {:id         2
+                           :has-marble false
+                           :neighbors  [nil 3 1 5]}
+                       3  {:id         3
+                           :has-marble false
+                           :neighbors  [nil nil 2 6]}
+                       4  {:id         4
+                           :has-marble false
+                           :neighbors  [1 5 nil 9]}
+                       5  {:id         5
+                           :has-marble false
+                           :neighbors  [2 6 4 10]}
+                       6  {:id         6
+                           :has-marble false
+                           :neighbors  [3 nil 5 11]}
+                       7  {:id         7
+                           :has-marble false
+                           :neighbors  [nil 8 nil 14]}
+                       8  {:id         8
+                           :has-marble false
+                           :neighbors  [nil 9 7 15]}
+                       9  {:id         9
+                           :has-marble false
+                           :neighbors  [4 10 8 16]}
+                       10 {:id         10
+                           :has-marble false
+                           :neighbors  [5 11 9 17]}
+                       11 {:id         11
+                           :has-marble false
+                           :neighbors  [6 12 10 18]}
+                       12 {:id         12
+                           :has-marble false
+                           :neighbors  [nil 13 11 19]}
+                       13 {:id         13
+                           :has-marble false
+                           :neighbors  [nil nil 12 20]}
+                       14 {:id         14
+                           :has-marble false
+                           :neighbors  [7 15 nil 21]}
+                       15 {:id         15
+                           :has-marble false
+                           :neighbors  [8 16 14 22]}
+                       16 {:id         16
+                           :has-marble true
+                           :neighbors  [9 17 15 23]}
+                       17 {:id         17
+                           :has-marble false
+                           :neighbors  [10 18 16 24]}
+                       18 {:id         18
+                           :has-marble false
+                           :neighbors  [11 19 17 25]}
+                       19 {:id         19
+                           :has-marble true
+                           :neighbors  [12 20 18 26]}
+                       20 {:id         20
+                           :has-marble false
+                           :neighbors  [13 nil 19 27]}
+                       21 {:id         21
+                           :has-marble false
+                           :neighbors  [14 22 nil nil]}
+                       22 {:id         22
+                           :has-marble false
+                           :neighbors  [15 23 21 nil]}
+                       23 {:id         23
+                           :has-marble false
+                           :neighbors  [16 24 22 28]}
+                       24 {:id         24
+                           :has-marble false
+                           :neighbors  [17 25 23 29]}
+                       25 {:id         25
+                           :has-marble false
+                           :neighbors  [18 26 24 30]}
+                       26 {:id         26
+                           :has-marble false
+                           :neighbors  [19 27 25 nil]}
+                       27 {:id         27
+                           :has-marble false
+                           :neighbors  [20 nil 26 nil]}
+                       28 {:id         28
+                           :has-marble false
+                           :neighbors  [23 29 nil 31]}
+                       29 {:id         29
+                           :has-marble false
+                           :neighbors  [24 30 28 32]}
+                       30 {:id         30
+                           :has-marble false
+                           :neighbors  [25 nil 29 33]}
+                       31 {:id         31
+                           :has-marble false
+                           :neighbors  [28 32 nil nil]}
+                       32 {:id         32
+                           :has-marble false
+                           :neighbors  [29 33 31 nil]}
+                       33 {:id         33
+                           :has-marble false
+                           :neighbors  [30 nil 32 nil]}}
+               :remaining-pegs 3
+               :game-win? false
+               :game-over? false}]
+
+    (any-jumps-remaining board)
+    )
+
+
+  (some true? '(false false false))
   )
 
 
