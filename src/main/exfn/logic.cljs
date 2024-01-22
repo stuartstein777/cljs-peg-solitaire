@@ -101,6 +101,9 @@
        :has-marble true
        :neighbors  [30 nil 32 nil]}})
 
+(defn has-marble? [board id]
+  (true? (get-in board [id :has-marble])))
+
 ;; neighbour has to have a marble, that neighbour in same direction
 ;; has to be empty
 ;; e.g. to jump east 
@@ -116,7 +119,6 @@
         direct-neighbour-has-marble? (true? (get-in board [direct-neighbour :has-marble]))
         direct-neighbour-neighbour-has-no-marble? (false? (get-in board [direct-neighbour-neighbour :has-marble]))]
     (and direct-neighbour-has-marble? direct-neighbour-neighbour-has-no-marble?)))
-
 
 (defn get-potential-jumps [board from]
   (let [neighbors (get-in board [from :neighbors])
