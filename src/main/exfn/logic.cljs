@@ -144,9 +144,6 @@
 ;; the cell in between needs to set has-marble: false.
 ;; cell in between is board->from->neighbors->direction
 (defn jump [board from target direction]
-  (prn "from: " from)
-  (prn "target: " target)
-  (prn "direction: " direction)
   (-> board
       (update-in [from] assoc :has-marble false)
       (update-in [target] assoc :has-marble true)
@@ -200,8 +197,6 @@
         47 33} cell) -1))
 
 (defn target-cell? [targets cell-id]
-  (prn "targets" targets)
-  (prn "cell id" cell-id)
   ((->> (map :cell targets)
         (remove nil?)
         (set))

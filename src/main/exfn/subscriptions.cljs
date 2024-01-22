@@ -15,3 +15,13 @@
  :targets
  (fn [db _]
    (:targets db)))
+
+(rf/reg-sub
+ :remaining-pegs
+ (fn [db _]
+   (:remaining-pegs db)))
+
+(rf/reg-sub
+ :game-over?
+ (fn [db _]
+   (:game-over? db)))

@@ -3,12 +3,12 @@
             [exfn.logic :as bf]
             [clojure.set :as set]))
 
-
 (rf/reg-event-db
  :initialize
  (fn [_ _]
    {:board (bf/generate-board)
     :selected-cell nil
+    :remaining-pegs 32
     :valid-targets []}))
 
 (rf/reg-event-db
@@ -27,7 +27,6 @@
        db))))
 
 (defn translate-direction [direction]
-  (prn "direction:" direction)
   (case direction
     :north 0
     :east 1
@@ -37,7 +36,6 @@
 (rf/reg-event-db
  :jump
  (fn [db [_ target-cell]]
-   (prn "jumping" (db :selected-cell) "to" target-cell)
    (let [selected-cell (db :selected-cell)
          direction (->> db
                         :targets
@@ -45,12 +43,15 @@
                         first
                         :direction
                         translate-direction)
-         new-board (bf/jump (:board db) selected-cell target-cell direction)]
-     
-     (-> db 
+         new-board (bf/jump (:board db) selected-cell target-cell direction)
+         remaining-pegs (bf/pegs-remaining new-board)
+         game-over? (not (bf/any-jumps-remaining new-board))]
+     (-> db
          (assoc :board new-board)
          (assoc :selected-cell nil)
-         (assoc :targets #{})))))
+         (assoc :remaining-pegs remaining-pegs)
+         (assoc :targets #{})
+         (assoc :game-over? game-over?)))))
 
 (comment
   (let [targets #{{:direction :north, :cell nil} {:direction :east, :cell 17} {:direction :west, :cell nil} {:direction :south, :cell nil}}

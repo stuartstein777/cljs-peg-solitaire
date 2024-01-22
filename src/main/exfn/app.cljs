@@ -8,21 +8,23 @@
 
 ;; -- App -------------------------------------------------------------------------
 (defn app []
-  (let [board         @(rf/subscribe [:board])
-        selected-cell @(rf/subscribe [:selected-cell])
-        targets       @(rf/subscribe [:targets])]
+  (let [board          @(rf/subscribe [:board])
+        selected-cell  @(rf/subscribe [:selected-cell])
+        targets        @(rf/subscribe [:targets])
+        remaining-pegs @(rf/subscribe [:remaining-pegs])
+        game-over?     @(rf/subscribe [:game-over?])]
     [:div.container
      [:div.row
       [:div.col.col-lg-8
        [:h1 "Peg Solitaire"]]
-      [:div.col.col-lg-4 {:style {:text-align :right
+      [:div.col.col-lg-4 {:style {:text-align    :right
                                   :padding-right 50}}
        [:i.fab.fa-github]
-       [:a {:href "https://github.com/stuartstein777/peg-solitaire"
+       [:a {:href  "https://github.com/stuartstein777/peg-solitaire"
             :style {:text-decoration :none}}
         " (repo) "]
        "|"
-       [:a {:href "https://stuartstein777.github.io/"
+       [:a {:href  "https://stuartstein777.github.io/"
             :style {:text-decoration :none}}
         " other projects"]]]
      [:div.row
@@ -33,19 +35,26 @@
             (if (= cell -1)
               [:div.inactive]
               [:div
-               {:on-click
-                (if (lgc/target-cell? targets cell)
-                  (do
-                    (prn "jumping!")
-                    #(rf/dispatch-sync [:jump cell]))
-                  #(rf/dispatch-sync [:select-cell cell]))
-                :class (cond
-                         (= cell selected-cell)          "selected"
-                         (lgc/target-cell? targets cell) "target"
-                         :else                           "board-cell")}
+               {:on-click (if (lgc/target-cell? targets cell)
+                            #(rf/dispatch-sync [:jump cell])
+                            #(rf/dispatch-sync [:select-cell cell]))
+                :class    (cond
+                            (= cell selected-cell)          "selected"
+                            (lgc/target-cell? targets cell) "target"
+                            :else                           "board-cell")}
                [:div.concave
                 (when (lgc/has-marble? board cell)
-                  [:div.marble])]])))]]]]))
+                  [:div.marble])]])))]
+       #_(when game-over?
+         [:div.game-over "Game Over"])]]
+     [:div.row
+      {:style {:padding-top 20}}
+      [:div.col.col-lg-4
+       (str "Remaining Pegs " remaining-pegs)]
+      [:div.col.col-lg-4
+       [:button.btn.btn-primary
+        {:on-click #(rf/dispatch-sync [:initialize])}
+        "Reset Board"]]]]))
 
 ;; -- After-Load --------------------------------------------------------------------
 ;; Do this after the page has loaded.
