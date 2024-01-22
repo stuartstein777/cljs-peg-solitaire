@@ -6,11 +6,6 @@
             [exfn.logic :as ms]
             [goog.string.format]))
 
-(defn pad-zero [n]
-  (if (< n 10)
-    (str "0" n)
-    (str n)))
-
 
 
 ;; -- App -------------------------------------------------------------------------
@@ -28,7 +23,60 @@
      "|"
      [:a {:href "https://stuartstein777.github.io/"
           :style {:text-decoration :none}}
-      " other projects"]]]])
+      " other projects"]]]
+   [:div.row
+    [:div.col.col-lg-12
+     [:div.board
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell
+       [:div.marble]]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell]
+      [:div.board-cell.inactive]
+      [:div.board-cell.inactive]]]]])
 
 ;; -- After-Load --------------------------------------------------------------------
 ;; Do this after the page has loaded.

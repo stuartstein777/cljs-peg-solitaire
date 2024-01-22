@@ -7,11 +7,7 @@
 (rf/reg-event-db
  :initialize
  (fn [_ _]
-   {
-    }))
+   {:board (bf/generate-board)
+    :selected-cell nil
+    :valid-targets []}))
 
-
-(rf/reg-event-db
- :reset
- (fn [_ [_ game]]
-   game))

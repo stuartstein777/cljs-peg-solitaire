@@ -1,8 +1,4 @@
-(ns exfn.logic
-  (:require [clojure.set :as set]))
-
-
-;;
+(ns exfn.logic)
 
 (defn generate-board []
   {1  {:id 1
@@ -129,15 +125,44 @@
         can-jump-west (can-jump board from 2)
         can-jump-south (can-jump board from 3)]
     
-    [(when can-jump-north (get-in board [(neighbors 0) :neighbors 0])) 
-     (when can-jump-east (get-in board [(neighbors 1) :neighbors 1]))
-     (when can-jump-west (get-in board [(neighbors 2) :neighbors 2]))
-     (when can-jump-south (get-in board [(neighbors 3) :neighbors 3]))]))
+    [{:north (when can-jump-north (get-in board [(neighbors 0) :neighbors 0]))} 
+     {:east (when can-jump-east (get-in board [(neighbors 1) :neighbors 1]))}
+     {:west (when can-jump-west (get-in board [(neighbors 2) :neighbors 2]))}
+     {:south (when can-jump-south (get-in board [(neighbors 3) :neighbors 3]))}]))
 
+(defn pegs-remaining [board]
+  (count (filter true? (map :has-marble (vals board)))))
+
+;; from cell needs to set has-marble: false.
+;; target cell needs to set has-marble: true.
+;; the cell in between needs to set has-marble: false.
+;; cell in between is board->from->neighbors->direction
+(defn jump [board from target direction]
+  (-> board
+      (update-in [from] assoc :has-marble false)
+      (update-in [target] assoc :has-marble true)
+      (update-in [(get-in board [from :neighbors direction])] assoc :has-marble false)))
+
+(defn any-jumps-remaining [board]
+  (let [cells (range 1 34)]
+    (->>
+     (for [cell cells
+           direction (range 0 4)
+           :when (can-jump board cell direction)]
+       true)
+     (some true?))))
+
+(defn game-won? [board]
+  (= 1 (pegs-remaining board)))
 
 (comment
   
-  (get-potential-jumps (generate-board) 1)
+  (any-jumps-remaining (generate-board))
+  (pegs-remaining (generate-board))
+  (get-potential-jumps (generate-board) 29)
+  (jump (generate-board) 29 17 0)
+  
+  
   
   )
 
