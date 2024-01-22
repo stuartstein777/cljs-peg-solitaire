@@ -10,3 +10,8 @@
  :selected-cell
  (fn [db _]
    (:selected-cell db)))
+
+(rf/reg-sub
+ :targets
+ (fn [db _]
+   (:targets db)))

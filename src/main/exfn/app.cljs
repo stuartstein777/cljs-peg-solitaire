@@ -8,8 +8,9 @@
 
 ;; -- App -------------------------------------------------------------------------
 (defn app []
-  (let [board @(rf/subscribe [:board])
-        selected-cell @(rf/subscribe [:selected-cell])]
+  (let [board         @(rf/subscribe [:board])
+        selected-cell @(rf/subscribe [:selected-cell])
+        targets       @(rf/subscribe [:targets])]
     [:div.container
      [:div.row
       [:div.col.col-lg-8
@@ -33,9 +34,10 @@
               [:div.inactive]
               [:div
                {:on-click #(rf/dispatch-sync [:select-cell cell])
-                :class (if (= cell selected-cell)
-                         "selected"
-                         "board-cell")}
+                :class (cond
+                         (= cell selected-cell) "selected"
+                         (lgc/target-cell? targets cell) "target"
+                         :else "board-cell")}
                [:div.concave
                 (when (lgc/has-marble? board cell)
                   [:div.marble])]])))]]]]))

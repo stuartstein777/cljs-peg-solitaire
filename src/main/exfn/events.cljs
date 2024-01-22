@@ -17,6 +17,11 @@
    (let [board (:board db)]
      (if (bf/has-marble? board cell-id)
        (if (= (db :selected-cell) cell-id)
-         (dissoc db :selected-cell)
-         (assoc db :selected-cell cell-id))
+         (-> db
+             (dissoc :selected-cell)
+             (assoc :targets [])
+             )
+         (-> db 
+             (assoc :selected-cell cell-id)
+             (assoc :targets (set (bf/get-potential-jumps board cell-id)))))
        db))))

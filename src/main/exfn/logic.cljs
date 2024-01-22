@@ -192,6 +192,17 @@
         46 32
         47 33} cell) -1))
 
+(defn target-cell? [targets cell-id]
+  ((->> (mapcat vals targets)
+        (remove nil?)
+        (set))
+   cell-id))
+
+(comment
+  (let [targets [{:north 17} {:east nil} {:west nil} {:south nil}]
+        cell-id 18]
+    (target-cell? targets cell-id))
+  )
 (comment
   
   (any-jumps-remaining (generate-board))
