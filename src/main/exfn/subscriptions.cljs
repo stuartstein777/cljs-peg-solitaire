@@ -5,3 +5,8 @@
  :board
  (fn [db _]
    (:board db)))
+
+(rf/reg-sub
+ :selected-cell
+ (fn [db _]
+   (:selected-cell db)))

@@ -157,6 +157,41 @@
 (defn game-won? [board]
   (= 1 (pegs-remaining board)))
 
+(defn get-cell-id [cell]
+  (or ({3 1,
+        4 2
+        5, 3
+        10 4
+        11 5
+        12 6
+        15 7
+        16 8
+        17 9
+        18 10
+        19 11
+        20 12
+        21 13
+        22 14
+        23 15
+        24 16
+        25 17
+        26 18
+        27 19
+        28 20
+        29 21
+        30 22
+        31 23
+        32 24
+        33 25
+        34 26
+        35 27
+        38 28
+        39 29
+        40 30
+        45 31
+        46 32
+        47 33} cell) -1))
+
 (comment
   
   (any-jumps-remaining (generate-board))

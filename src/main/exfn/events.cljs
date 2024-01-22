@@ -11,3 +11,12 @@
     :selected-cell nil
     :valid-targets []}))
 
+(rf/reg-event-db
+ :select-cell
+ (fn [db [_ cell-id]]
+   (let [board (:board db)]
+     (if (bf/has-marble? board cell-id)
+       (if (= (db :selected-cell) cell-id)
+         (dissoc db :selected-cell)
+         (assoc db :selected-cell cell-id))
+       db))))
